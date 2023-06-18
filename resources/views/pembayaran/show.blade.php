@@ -4,9 +4,18 @@
 
 <div class="container-sm pt-3 p-5">
 
+    <form action="{{ route('logout') }}" method="post" class="mb-3">
+        @csrf
+        <button class="btn btn-danger" style="float: right;" type="submit">Logout</button>
+    </form>
+
     <div class="mb-3">
-        <a href="{{ route('pembayaran.index') }}" class="btn btn-danger">Back</a>
-        <a href="{{ route('pembayaran.edit', $pembayaran->id) }}" class="btn btn-primary ms-1">Edit</a>
+        @if (Auth::user()->role == 'admin')
+            <a href="{{ route('admin-dashboard') }}" class="btn btn-danger">Back</a>
+        @else
+            <a href="{{ route('user-dashboard') }}" class="btn btn-danger">Back</a>
+        @endif
+        <a href="{{ route('edit-pembayaran', $pembayaran->id) }}" class="btn btn-primary ms-1">Edit</a>
     </div>
 
     <div class="card p-5">

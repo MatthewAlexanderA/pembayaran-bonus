@@ -31,17 +31,7 @@
                     <td>{{ $pembayaran->created_at->format('d M Y') }}</td>
 
                     <td>
-                        <form action="{{ route('pembayaran.destroy',$pembayaran->id) }}" method="POST">
-
-                            <a class="btn btn-warning" href="{{ route('show-pembayaran',$pembayaran->id) }}">Detail</a>
-                            <a class="btn btn-primary" href="{{ route('edit-pembayaran',$pembayaran->id) }}">Edit</a>
-
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit" class="btn btn-danger"
-                                onclick="return confirm('Delete?')">Delete</button>
-                        </form>
+                        <a class="btn btn-warning" href="{{ route('show-pembayaran',$pembayaran->id) }}">Detail</a>
                     </td>
 
                 </tr>

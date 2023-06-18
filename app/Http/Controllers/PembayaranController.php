@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Buruh;
 use App\Models\Pembayaran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PembayaranController extends Controller
 {
@@ -13,6 +14,13 @@ class PembayaranController extends Controller
         $pembayarans = Pembayaran::latest()->get();
 
         return view('pembayaran.index', compact('pembayarans'));
+    }
+
+    public function user() 
+    {
+        $pembayarans = Pembayaran::latest()->get();
+
+        return view('pembayaran.user', compact('pembayarans'));
     }
 
     public function create() 
@@ -40,8 +48,14 @@ class PembayaranController extends Controller
             $buruh['pembayaran_id'] = $id->id;
             Buruh::create($buruh);
         }
-        return redirect()->route('pembayaran.index')
-            ->with('success', 'Pembayaran Berhasil!');
+
+        if (Auth::user()->role == 'admin') {
+            return redirect()->route('admin-dashboard')
+                ->with('success', 'Pembayaran Berhasil!');
+        } else {
+            return redirect()->route('user-dashboard')
+                ->with('success', 'Pembayaran Berhasil!');
+        }
     }
 
     public function show($id) 
@@ -81,17 +95,27 @@ class PembayaranController extends Controller
             $buruh = Buruh::find($request->buruh_id[$i]);
             $buruh->update($updateData);
         }
-
-        return redirect()->route('pembayaran.index')
-            ->with('success', 'Update Berhasil!');
+        
+        if (Auth::user()->role == 'admin') {
+            return redirect()->route('admin-dashboard')
+                ->with('success', 'Update Berhasil!');
+        } else {
+            return redirect()->route('user-dashboard')
+                ->with('success', 'Update Berhasil!');
+        }
     }
 
     public function destroy(Pembayaran $pembayaran) 
     {
         $pembayaran->delete($pembayaran->id);
-
-        return redirect()->route('pembayaran.index')
-            ->with('success', 'Delete Success!');
+        
+        if (Auth::user()->role == 'admin') {
+            return redirect()->route('admin-dashboard')
+                ->with('success', 'Delete Berhasil!');
+        } else {
+            return redirect()->route('user-dashboard')
+                ->with('success', 'Delete Berhasil!');
+        }
     }
 
 }

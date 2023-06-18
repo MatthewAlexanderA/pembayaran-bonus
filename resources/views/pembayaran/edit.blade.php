@@ -4,12 +4,21 @@
 
 <div class="container-sm pt-3 p-5">
 
-    <form action="{{ route('pembayaran.update', $pembayaran->id) }}" method="POST">
+    <form action="{{ route('logout') }}" method="post" class="mb-3">
+        @csrf
+        <button class="btn btn-danger" style="float: right;" type="submit">Logout</button>
+    </form>
+
+    <form action="{{ route('update-pembayaran', $pembayaran->id) }}" method="POST">
         @csrf
         @METHOD('PUT')
 
         <div class="mb-3">
-            <a href="{{ route('pembayaran.index') }}" class="btn btn-danger">Back</a>
+            @if (Auth::user()->role == 'admin')
+                <a href="{{ route('admin-dashboard') }}" class="btn btn-danger">Back</a>
+            @else
+                <a href="{{ route('user-dashboard') }}" class="btn btn-danger">Back</a>
+            @endif
         </div>
 
         <div class="row mb-5">
