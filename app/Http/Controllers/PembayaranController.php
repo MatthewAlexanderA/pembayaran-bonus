@@ -38,7 +38,7 @@ class PembayaranController extends Controller
             return back()->with('error', 'Total persen tidak 100%!');
         }
 
-        $pembayaran['nominal'] = $request->pembayaran;
+        $pembayaran['nominal'] = str_replace(',', '', $request->pembayaran);
         $id = Pembayaran::create($pembayaran);
 
         $length = count($request->nama_buruh);
@@ -84,7 +84,7 @@ class PembayaranController extends Controller
             return back()->with('error', 'Total persen tidak 100%!');
         }
 
-        $data['nominal'] = $request->pembayaran;
+        $data['nominal'] = str_replace(',', '', $request->pembayaran);
         $pembayaran = Pembayaran::find($id);
         $pembayaran->update($data);
 

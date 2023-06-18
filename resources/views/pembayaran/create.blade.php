@@ -22,21 +22,24 @@
         </div>
 
         <div class="row mb-5">
-            <div class="col-md-5 col-sm-12">
+            <div class="col-md-4 col-sm-12">
                 <label for="pembayaran" class="form-label">Nominal</label>
             </div>
-            <div class="col-md-7 col-sm-12">
-                <input type="number" class="form-control" id="pembayaran" name="pembayaran" placeholder="Dalam rupiah" required>
+            <div class="col-md-8 col-sm-12">
+                <div class="input-group">
+                    <span class="input-group-text">Rp</span>
+                    <input type="text" class="form-control" id="pembayaran" name="pembayaran" placeholder="Dalam rupiah" required>
+                </div>
             </div>
         </div>
         <div id="inputs">
             <div class="row mb-3">
-                <div class="col-md-5 col-sm-12">
+                <div class="col-md-4 col-sm-12">
                     <input type="text" class="form-control" name="nama_buruh[]" required placeholder="Nama Buruh">
                 </div>
                 <div class="col-md-5 col-sm-12">
                     <div class="input-group">
-                        <input type="number" step="0.01" class="form-control" name="percentage[]" id="percentage" required>
+                        <input type="number" step="0.01" class="form-control" name="percentage[]" id="percentage1" required onfocus="count(1)" value="0">
                         <span class="input-group-text">%</span>
                         <span class="input-group-text">
                             <button class="remove-btn btn btn-danger">
@@ -45,6 +48,7 @@
                         </span>
                     </div>
                 </div>
+                <div class="col-3" id="output1"></div>
             </div>
         </div>
         
@@ -54,6 +58,49 @@
     </form>
 
 </div>
+
+<script>
+    function count(id) {
+        const pembayaran = document.getElementById('pembayaran');
+        const percentage = document.getElementById('percentage' + id);
+        const output = document.getElementById('output' + id);
+
+        pembayaran.addEventListener('input', calculateResult);
+        percentage.addEventListener('input', calculateResult);
+
+        function calculateResult() {
+        const raw = pembayaran.value;
+        const change = raw.replace(/,/g, '');
+        const value1 = parseInt(change);
+        const value2 = Number(percentage.value);
+
+        const result = value1 * value2 / 100;
+        
+        output.innerText = 'Rp ' + result.toLocaleString();
+        }
+    }
+</script>
+
+<script>
+    const inputElement = document.getElementById('pembayaran');
+
+    inputElement.addEventListener('input', function(e) {
+    const rawValue = e.target.value;
+    const formattedValue = formatNumber(rawValue);
+    
+    e.target.value = formattedValue;
+    });
+
+    function formatNumber(value) {
+    // Remove non-numeric characters
+    const numericValue = value.replace(/\D/g, '');
+    
+    // Apply number formatting logic (e.g., adding commas)
+    const formattedValue = new Intl.NumberFormat().format(numericValue);
+    
+    return formattedValue;
+    }
+</script>
 
 <script>
     const addButton = document.querySelector('#add-btn');
@@ -68,7 +115,7 @@
         inputRow.className = 'row mb-3';
 
         const inputDiv1 = document.createElement('div');
-        inputDiv1.className = 'col-md-5 col-sm-12';
+        inputDiv1.className = 'col-md-4 col-sm-12';
 
         const nameLabel = document.createElement('input');
         nameLabel.setAttribute('type', 'text');
@@ -88,6 +135,8 @@
         nameInput.setAttribute('name', 'percentage[]');
         nameInput.setAttribute('id', 'percentage' + buruh);
         nameInput.setAttribute('step', '0.01');
+        nameInput.setAttribute('onfocus', 'count(' + buruh + ')');
+        nameInput.setAttribute('value', '0');
         nameInput.className = 'form-control';
         nameInput.required = true;
 
@@ -107,8 +156,13 @@
         const btnIcon = document.createElement('i');
         btnIcon.className = 'fa-solid fa-trash-can';
 
+        const inputDiv3 = document.createElement('div');
+        inputDiv3.className = 'col-3';
+        inputDiv3.setAttribute('id', 'output' + buruh);
+
         inputRow.appendChild(inputDiv1);
         inputRow.appendChild(inputDiv2);
+        inputRow.appendChild(inputDiv3);
         inputDiv1.appendChild(nameLabel);
         inputDiv2.appendChild(inputGroup);
         inputGroup.appendChild(nameInput);
